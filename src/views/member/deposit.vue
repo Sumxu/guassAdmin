@@ -5,17 +5,18 @@ import TableButtons from "@/components/opts/btns2.vue";
 import { PureTable } from "@pureadmin/table";
 import * as $Api from "@/api/member/deposit";
 import message from "@/utils/message";
-import {   fromWei, callContractMethod } from "@/utils/wallet";
-import {   depositStatusOptions, amountOptions,userSetLevelOptions,pidOptions } from "@/constants/constants";
-import {  depositStatusConvert, pidScopeConvert} from "@/constants/convert";
+import { fromWei, callContractMethod } from "@/utils/wallet";
+import { depositStatusOptions, amountOptions, userSetLevelOptions, pidOptions, pledgeTypeOptions } from "@/constants/constants";
+import { depositStatusConvert, pidScopeConvert } from "@/constants/convert";
 import { contractAddress } from "@/config/contract";
 import { saveExcelFile } from "@/utils/file";
-
+import StatusTabs from "@/components/opts/status-tabs.vue";
 const pageData: any = reactive({
   searchState: true,
   searchForm: {},
   amountType: "",//派送类型
   amountNumber: "",//派送数量
+  pid:"null",
   searchField: [
     {
       type: "input",
@@ -26,26 +27,11 @@ const pageData: any = reactive({
     {
       type: "date",
       dateType: "datetimerange",
-      label: "赎回日期范围",
+      label: "投入日期范围",
       prop: "dates",
       placeholder: "请输入日期范围",
       startPlaceholder: "请输入开始日期范围",
       endPlaceholder: "请输入结束日期范围",
-    },
-    {
-      type: "select",
-      label: "Pid",
-      prop: "pid",
-      placeholder: "请选择pid",
-      dataSourceKey: "pidOptions",
-      options: {
-        filterable: true,
-        keys: {
-          prop: "value",
-          value: "value",
-          label: "label"
-        }
-      }
     },
     {
       type: "select",
@@ -61,11 +47,27 @@ const pageData: any = reactive({
           label: "label"
         }
       }
+    },
+    {
+      type: "radio",
+      label: "类型",
+      prop: "queryType",
+      default: 1,
+      dataSourceKey: "pledgeTypeOptions",
+      options: {
+        filterable: true,
+        keys: {
+          prop: "prop",
+          value: "value",
+          label: "label"
+        }
+      }
     }
   ],
   dataSource: {
     depositStatusOptions: depositStatusOptions,
-    pidOptions: pidOptions
+    pidOptions: pidOptions,
+    pledgeTypeOptions: pledgeTypeOptions
   },
   permission: {
     query: ["defi:user:page"]
@@ -73,7 +75,7 @@ const pageData: any = reactive({
   btnOpts: {
     size: "small",
     leftBtns: [
-      { key: "promotion", label: "导出报表", icon: "ep:promotion", state: true},
+      { key: "promotion", label: "导出报表", icon: "ep:promotion", state: true },
     ],
     rightBtns: [
       { key: "search", label: "查询", icon: "ep:search", state: true },
@@ -87,7 +89,7 @@ const pageData: any = reactive({
         prop: "address",
         width: "370px"
       },
-      { label: "Pid", prop: "pid", minWidth: "120px",slot:"pidScope" },
+      { label: "天数", prop: "pid", minWidth: "120px", slot: "pidScope" },
       { label: "USDT", prop: "usdt", minWidth: "120px", slot: "usdtScope" },
       { label: "JU", prop: "ju", minWidth: "120px", slot: "juScope" },
       { label: "赎回时间", prop: "redeemTime", minWidth: "120px" },
@@ -123,7 +125,8 @@ const _resetSearchForm = (data?) => (pageData.searchForm = data);
 const getQueryParams = () => ({
   ...pageData.searchForm,
   current: pageData.tableParams.pagination.currentPage,
-  size: pageData.tableParams.pagination.pageSize
+  size: pageData.tableParams.pagination.pageSize,
+  pid:pageData.pid
 });
 
 // 获取表格数据
@@ -172,8 +175,8 @@ const btnClickHandle = (key: string) => {
       break;
   }
 };
- 
- 
+
+
 
 //导出报表
 const deriveXlsx = async () => {
@@ -183,6 +186,10 @@ const deriveXlsx = async () => {
     saveExcelFile(res.data, "用户质押记录");
   }
 }
+const handleClick = (tabName: any) => {
+  pageData.pid = tabName;
+  _loadData();
+};
 onMounted(() => _loadData());
 </script>
 
@@ -192,6 +199,7 @@ onMounted(() => _loadData());
       @search-form="_updateSearchFormData" @search="_searchForm" @reset="_resetSearchForm" />
     <table-buttons :size="pageData.btnOpts.size" :left-btns="pageData.btnOpts.leftBtns"
       :right-btns="pageData.btnOpts.rightBtns" @click="btnClickHandle" />
+      <status-tabs v-model="pageData.pid" :tabs="pidOptions" @change="handleClick" />
     <pure-table :data="pageData.tableParams.list" :columns="pageData.tableParams.columns" row-key="address" border
       stripe :loading="pageData.tableParams.loading" :pagination="pageData.tableParams.pagination"
       @page-current-change="handleChangeCurrentPage" @page-size-change="handleChangePageSize">

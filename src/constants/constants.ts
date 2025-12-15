@@ -205,6 +205,7 @@ export const pidOptions: SelectOption<number>[] = [
   { label: "30天", value: 2 }
 ];
 export const pledgeTypeOptions: SelectOption<number>[] = [
+  { label: "全部", value: 'null' },
   { label: "查个人", value: 1 },
   { label: "查伞下", value: 2 }
 ];
