@@ -118,7 +118,7 @@ export const statusMap: SelectOptionMap<string> = {
 };
 export const awardMap: SelectOptionMap<string> = {
   0: "待发奖",
-  1: "已发送",
+  1: "已发送"
 };
 export const levelOptions: SelectOption<number>[] = [
   { label: "无", value: 0 },
@@ -200,12 +200,12 @@ export const bizTypeOptions: SelectOption<number>[] = [
 ];
 
 export const pidOptions: SelectOption<number>[] = [
+  { label: "全部", value: "null" },
   { label: "1天", value: 0 },
   { label: "15天", value: 1 },
   { label: "30天", value: 2 }
 ];
 export const pledgeTypeOptions: SelectOption<number>[] = [
-  { label: "全部", value: 'null' },
   { label: "查个人", value: 1 },
   { label: "查伞下", value: 2 }
 ];
@@ -217,7 +217,7 @@ export const userlevelMap: SelectOptionMap<string> = {
   4: "F4",
   5: "F5",
   6: "F6",
-  7: "F7",
+  7: "F7"
 };
 export const pidMap: SelectOptionMap<string> = {
   0: "1天",
@@ -226,7 +226,7 @@ export const pidMap: SelectOptionMap<string> = {
 };
 export const rewardTypeMip: SelectOptionMap<string> = {
   1: "团队奖励",
-  2: "代数奖励",
+  2: "代数奖励"
 };
 export const levelMap: SelectOptionMap<string> = {
   0: "无",

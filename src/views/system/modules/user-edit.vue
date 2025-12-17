@@ -337,8 +337,6 @@ const handleCancel = () => {
 const handleConfirm = () => {
   formRef.value!.validate((isValid: boolean) => {
     if (isValid) {
-      console.log("pageData.mode---", pageData.formParam.infoForm)
-      return
       if (pageData.mode === "add") {
         save();
       } else {
