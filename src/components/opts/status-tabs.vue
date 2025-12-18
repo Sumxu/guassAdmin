@@ -3,7 +3,7 @@ import { defineProps, defineEmits } from "vue";
 
 const props = defineProps<{
   modelValue: string | number; // 当前激活的tab
-  tabs: Array<{ label: string; name: string | number }>; // tab配置
+  tabs: Array<{ label: string; value: string | number }>; // tab配置
 }>();
 
 const emit = defineEmits(["update:modelValue", "change"]);
@@ -22,9 +22,9 @@ const handleChange = (val: string | number) => {
   >
     <el-tab-pane
       v-for="tab in props.tabs"
-      :key="tab.name"
+      :key="tab.value"
       :label="tab.label"
-      :name="tab.name"
+      :name="tab.value"
     />
   </el-tabs>
 </template>
