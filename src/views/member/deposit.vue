@@ -16,7 +16,7 @@ const pageData: any = reactive({
   searchForm: {},
   amountType: "",//派送类型
   amountNumber: "",//派送数量
-  pid:"null",
+  pid: "null",
   searchField: [
     {
       type: "input",
@@ -29,6 +29,15 @@ const pageData: any = reactive({
       dateType: "datetimerange",
       label: "投入日期范围",
       prop: "dates",
+      placeholder: "请输入日期范围",
+      startPlaceholder: "请输入开始日期范围",
+      endPlaceholder: "请输入结束日期范围",
+    },
+    {
+      type: "date",
+      dateType: "datetimerange",
+      label: "赎回日期范围",
+      prop: "redeemDates",
       placeholder: "请输入日期范围",
       startPlaceholder: "请输入开始日期范围",
       endPlaceholder: "请输入结束日期范围",
@@ -126,7 +135,7 @@ const getQueryParams = () => ({
   ...pageData.searchForm,
   current: pageData.tableParams.pagination.currentPage,
   size: pageData.tableParams.pagination.pageSize,
-  pid:pageData.pid
+  pid: pageData.pid
 });
 
 // 获取表格数据
@@ -199,7 +208,7 @@ onMounted(() => _loadData());
       @search-form="_updateSearchFormData" @search="_searchForm" @reset="_resetSearchForm" />
     <table-buttons :size="pageData.btnOpts.size" :left-btns="pageData.btnOpts.leftBtns"
       :right-btns="pageData.btnOpts.rightBtns" @click="btnClickHandle" />
-      <status-tabs v-model="pageData.pid" :tabs="pidOptions" @change="handleClick" />
+    <status-tabs v-model="pageData.pid" :tabs="pidOptions" @change="handleClick" />
     <pure-table :data="pageData.tableParams.list" :columns="pageData.tableParams.columns" row-key="address" border
       stripe :loading="pageData.tableParams.loading" :pagination="pageData.tableParams.pagination"
       @page-current-change="handleChangeCurrentPage" @page-size-change="handleChangePageSize">

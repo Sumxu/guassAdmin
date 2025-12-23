@@ -6,8 +6,8 @@ import { PureTable } from "@pureadmin/table";
 import * as $Api from "@/api/member/user";
 import message from "@/utils/message";
 import { formatAddress, formatDate, fromWei, callContractMethod, toWei } from "@/utils/wallet";
-import { levelOptions, userLevelOptions, userTypeMap, userTypeOptions, isNodeTypeOptions, amountOptions, userSetLevelOptions } from "@/constants/constants";
-import { userlevelConvert, levelConvert, userTypeConvert, } from "@/constants/convert";
+import { levelOptions, userLevelOptions, userTypeMap, userTypeOptions, isNodeTypeOptions, amountOptions, userSetLevelOptions, pledgeTypeOptions } from "@/constants/constants";
+import { userlevelConvert, levelConvert, userTypeConvert } from "@/constants/convert";
 import { ElMessageBox, ElSelect, ElOption, ElInput } from "element-plus";
 import { contractAddress } from "@/config/contract";
 import { saveExcelFile } from "@/utils/file";
@@ -21,13 +21,30 @@ const pageData: any = reactive({
       type: "input",
       label: "钱包地址",
       prop: "address",
-      placeholder: "请输入钱包地址"
+      placeholder: "请输入钱包地址",
+      width: "370"
+    },
+    {
+      type: "radio",
+      label: "类型",
+      prop: "queryType",
+      default: 1,
+      dataSourceKey: "pledgeTypeOptions",
+      options: {
+        filterable: true,
+        keys: {
+          prop: "prop",
+          value: "value",
+          label: "label"
+        }
+      }
     },
     {
       type: "input",
       label: "上级地址",
       prop: "parentAddress",
-      placeholder: "请输入上级地址"
+      placeholder: "请输入上级地址",
+      width: "370"
     },
     {
       type: "select",
@@ -64,7 +81,8 @@ const pageData: any = reactive({
   dataSource: {
     userLevelOptions: userLevelOptions,
     userTypeOptions: userTypeOptions,
-    isNodeTypeOptions: isNodeTypeOptions
+    isNodeTypeOptions: isNodeTypeOptions,
+    pledgeTypeOptions: pledgeTypeOptions
   },
   permission: {
     query: ["defi:user:page"]
@@ -72,7 +90,7 @@ const pageData: any = reactive({
   btnOpts: {
     size: "small",
     leftBtns: [
-      { key: "promotion", label: "导出报表", icon: "ep:promotion", state: true},
+      { key: "promotion", label: "导出报表", icon: "ep:promotion", state: true },
     ],
     rightBtns: [
       { key: "search", label: "查询", icon: "ep:search", state: true },
@@ -179,7 +197,7 @@ const btnClickHandle = (key: string) => {
       break;
   }
 };
- 
+
 
 //导出报表
 const deriveXlsx = async () => {
